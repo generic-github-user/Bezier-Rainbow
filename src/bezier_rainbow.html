@@ -1,0 +1,89 @@
+<html>
+<head>
+<title>
+Bezier Rainbow
+</title>
+</head>
+<body bgcolor="black">
+
+	<canvas id="canvas" width="600" height="600"></canvas>
+	<script type="text/javascript">
+
+		var canvas = document.getElementById("canvas");
+		var ctx = canvas.getContext("2d");
+
+		ctx.canvas.width = window.innerWidth - 20;
+		ctx.canvas.height = window.innerHeight - 20;
+
+		var resolution = 1000;
+
+		var controlPointCoords = [];
+		for(i=0;i<3;i++){
+			controlPointCoords.push(Math.floor(Math.random()*(canvas.width-400)));
+			controlPointCoords.push(Math.floor(Math.random()*(canvas.height-400)));
+		}
+		var destPointCoords = [];
+		for(i=0;i<3;i++){
+			destPointCoords.push(Math.floor(Math.random()*(canvas.width-400)));
+			destPointCoords.push(Math.floor(Math.random()*(canvas.height-400)));
+		}
+
+
+		var x = 0;
+		var y = 0;
+
+		function drawScreen(){
+
+			ctx.beginPath();
+			ctx.fillStyle = "rgba(0,0,0,1)";
+
+			ctx.fillRect(0,0,canvas.width,canvas.height);
+			ctx.fill();
+
+			for(i=0;i<resolution;i++){
+
+				x = ((controlPointCoords[0] + ((controlPointCoords[4] - controlPointCoords[0]) / resolution) * i) + (((controlPointCoords[2] + ((controlPointCoords[4] - controlPointCoords[2]) / resolution) * (resolution - i)) - (controlPointCoords[0] + ((controlPointCoords[4] - controlPointCoords[0]) / resolution) * i)) / resolution) * i);
+				y = ((controlPointCoords[1] + ((controlPointCoords[5] - controlPointCoords[1]) / resolution) * i) + (((controlPointCoords[3] + ((controlPointCoords[5] - controlPointCoords[3]) / resolution) * (resolution - i)) - (controlPointCoords[1] + ((controlPointCoords[5] - controlPointCoords[1]) / resolution) * i)) / resolution) * i);
+
+				ctx.beginPath();
+
+				ctx.fillStyle = "rgba(255,0,0,1)";
+				ctx.fillRect(x,y,5,5);
+				ctx.fillStyle = "rgba(225,100,0,1)";
+				ctx.fillRect(x+50,y+50,5,5);
+				ctx.fillStyle = "rgba(200,200,0,1)";
+				ctx.fillRect(x+100,y+100,5,5);
+				ctx.fillStyle = "rgba(0,150,0,1)";
+				ctx.fillRect(x+150,y+150,5,5);
+				ctx.fillStyle = "rgba(0,0,255,1)";
+				ctx.fillRect(x+200,y+200,5,5);
+				ctx.fillStyle = "rgba(100,0,100,1)";
+				ctx.fillRect(x+250,y+250,5,5);
+
+				ctx.fill();
+
+			}
+
+			for(i=0;i<6;i++){
+				if(Math.abs(controlPointCoords[i]-destPointCoords[i])<50 && Math.abs(controlPointCoords[i + 1]-destPointCoords[i + 1])<50){
+					if(i==0||i==2||i==4){
+						destPointCoords[i] = Math.floor(Math.random()*canvas.width);
+					}
+					else{
+						destPointCoords[i] = Math.floor(Math.random()*canvas.height);
+					}
+				}
+			}
+
+			for(i=0;i<6;i++){
+				controlPointCoords[i] += (destPointCoords[i] - controlPointCoords[i]) / 250;
+			}
+
+		}
+
+		setInterval(drawScreen,50);
+
+	</script>
+
+</body>
+</html>
